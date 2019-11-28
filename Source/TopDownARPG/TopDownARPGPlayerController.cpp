@@ -36,6 +36,7 @@ void ATopDownARPGPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("Ability1", IE_Pressed, this, &ATopDownARPGPlayerController::ActivateAbility1);
 	InputComponent->BindAction("Ability2", IE_Pressed, this, &ATopDownARPGPlayerController::ActivateAbility2);
+	InputComponent->BindAction("SlowDownAreaAbility", IE_Pressed, this, &ATopDownARPGPlayerController::ActivateSlowDownAreaAbility);
 
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ATopDownARPGPlayerController::MoveToTouchLocation);
@@ -70,6 +71,22 @@ void ATopDownARPGPlayerController::ActivateAbility2()
 	}
 
 	UAbility* Ability = PlayerCharacter->AbilityInstances[1];
+	if (IsValid(Ability))
+	{
+		Ability->Activate(PlayerCharacter);
+	}
+}
+
+void ATopDownARPGPlayerController::ActivateSlowDownAreaAbility()
+{
+	auto* PlayerCharacter = Cast<ATopDownARPGCharacter>(GetPawn());
+	if (!IsValid(PlayerCharacter))
+	{
+		UE_LOG(LogTopDownARPG, Error, TEXT("In ATopDownARPGPlayerController::ActivateSlowDownAreaAbility - failed to access the character"));
+		return;
+	}
+
+	auto* Ability = PlayerCharacter->AbilityInstances[2];
 	if (IsValid(Ability))
 	{
 		Ability->Activate(PlayerCharacter);
